@@ -58,7 +58,14 @@
 <body>
   <div class="contenedor">
     <h2>Analizador de Números</h2>
-    <input type="number" id="numero" placeholder="Escribe un número" maxlength="9" oninput="validarLongitud(this)">
+    <input 
+      type="number" 
+      id="numero" 
+      placeholder="Escribe un número entero" 
+      maxlength="9" 
+      oninput="validarLongitud(this)" 
+      onkeydown="evitarPunto(event)"
+    >
     <br>
     <button onclick="analizarNumero()">Analizar</button>
     <button onclick="limpiar()">Limpiar</button>
@@ -68,10 +75,23 @@
   </div>
 
   <script>
+    // Evita que el usuario escriba puntos o comas
+    function evitarPunto(e) {
+      if (e.key === "." || e.key === "," || e.key === "e") {
+        e.preventDefault();
+        alert("Solo se permiten números enteros (sin puntos ni comas).");
+      }
+    }
+
+    // Limita la longitud máxima y bloquea el 0
     function validarLongitud(input) {
       if (input.value.length > 9) {
         input.value = input.value.slice(0, 9);
         alert("Máximo 9 dígitos permitidos para evitar errores.");
+      }
+      if (parseInt(input.value) === 0) {
+        input.value = "";
+        alert("No se permite el número 0.");
       }
     }
 
@@ -103,14 +123,13 @@
       const input = document.getElementById("numero");
       const valor = input.value.trim();
 
-      // Validación de campo vacío o inválido
       if (valor === "" || isNaN(valor)) {
         alert("Por favor, escribe un número válido.");
         limpiar();
         return;
       }
 
-      const numero = parseFloat(valor);
+      const numero = parseInt(valor);
       if (numero <= 0) {
         document.getElementById("resultado").innerText = "Por favor ingresa un número mayor que 0.";
         document.getElementById("divisores").innerText = "";
@@ -118,7 +137,6 @@
         return;
       }
 
-      // Caso especial: número 1
       if (numero === 1) {
         document.getElementById("resultado").innerText = "El número 1 no es primo ni compuesto.";
         document.getElementById("divisores").innerText = "Solo tiene un divisor: 1.";
