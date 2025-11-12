@@ -69,7 +69,6 @@
 
   <script>
     function validarLongitud(input) {
-      // Limita el número a 9 dígitos
       if (input.value.length > 9) {
         input.value = input.value.slice(0, 9);
         alert("Máximo 9 dígitos permitidos para evitar errores.");
@@ -95,19 +94,35 @@
       while (Math.abs(raiz * raiz - num) > precision) {
         raiz = (raiz + num / raiz) / 2;
         iteraciones++;
-        if (iteraciones > 10000) break; // seguridad
+        if (iteraciones > 10000) break;
       }
       return raiz;
     }
 
     function analizarNumero() {
       const input = document.getElementById("numero");
-      const numero = parseFloat(input.value);
+      const valor = input.value.trim();
 
-      if (isNaN(numero) || numero <= 0) {
-        document.getElementById("resultado").innerText = "Por favor ingresa un número válido.";
+      // Validación de campo vacío o inválido
+      if (valor === "" || isNaN(valor)) {
+        alert("Por favor, escribe un número válido.");
+        limpiar();
+        return;
+      }
+
+      const numero = parseFloat(valor);
+      if (numero <= 0) {
+        document.getElementById("resultado").innerText = "Por favor ingresa un número mayor que 0.";
         document.getElementById("divisores").innerText = "";
         document.getElementById("raiz").innerText = "";
+        return;
+      }
+
+      // Caso especial: número 1
+      if (numero === 1) {
+        document.getElementById("resultado").innerText = "El número 1 no es primo ni compuesto.";
+        document.getElementById("divisores").innerText = "Solo tiene un divisor: 1.";
+        document.getElementById("raiz").innerText = `Raíz cuadrada aproximada: ${raizNewton(numero).toFixed(6)}`;
         return;
       }
 
