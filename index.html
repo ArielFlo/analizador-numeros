@@ -71,6 +71,7 @@
     <button onclick="limpiar()">Limpiar</button>
     <p id="resultado"></p>
     <p id="divisores"></p>
+    <p id="conteo"></p>
     <p id="raiz"></p>
   </div>
 
@@ -133,6 +134,7 @@
       if (numero <= 0) {
         document.getElementById("resultado").innerText = "Por favor ingresa un número mayor que 0.";
         document.getElementById("divisores").innerText = "";
+        document.getElementById("conteo").innerText = "";
         document.getElementById("raiz").innerText = "";
         return;
       }
@@ -140,6 +142,7 @@
       if (numero === 1) {
         document.getElementById("resultado").innerText = "El número 1 no es primo ni compuesto.";
         document.getElementById("divisores").innerText = "Solo tiene un divisor: 1.";
+        document.getElementById("conteo").innerText = "Cantidad de divisores: 1.";
         document.getElementById("raiz").innerText = `Raíz cuadrada aproximada: ${raizNewton(numero).toFixed(3)}`;
         return;
       }
@@ -150,6 +153,7 @@
 
       document.getElementById("resultado").innerText = `El número ${numero} es ${primo ? "primo" : "compuesto"}.`;
       document.getElementById("divisores").innerText = `Es divisible entre: ${divisores.join(", ")}.`;
+      document.getElementById("conteo").innerText = `Cantidad total de divisores: ${divisores.length}.`;
       document.getElementById("raiz").innerText = `Raíz cuadrada aproximada: ${raiz.toFixed(3)}`;
     }
 
@@ -157,6 +161,7 @@
       document.getElementById("numero").value = "";
       document.getElementById("resultado").innerText = "";
       document.getElementById("divisores").innerText = "";
+      document.getElementById("conteo").innerText = "";
       document.getElementById("raiz").innerText = "";
     }
   </script>
