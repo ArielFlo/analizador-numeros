@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analizador de Números</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #007bff, #00c3ff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      margin: 0;
+    }
+    .contenedor {
+      background: rgba(255,255,255,0.15);
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 340px;
+      backdrop-filter: blur(6px);
+    }
+    input {
+      padding: 10px;
+      width: 80%;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 16px;
+    }
+    button {
+      background-color: #fff;
+      color: #007bff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-weight: bold;
+      margin: 5px;
+    }
+    button:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    p {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h2>Analizador de Números</h2>
+    <input type="number" id="numero" placeholder="Escribe un número" maxlength="9" oninput="validarLongitud(this)">
+    <br>
+    <button onclick="analizarNumero()">Analizar</button>
+    <button onclick="limpiar()">Limpiar</button>
+    <p id="resultado"></p>
+    <p id="divisores"></p>
+    <p id="raiz"></p>
+  </div>
+
+  <script>
+    function validarLongitud(input) {
+      // Limita el número a 9 dígitos
+      if (input.value.length > 9) {
+        input.value = input.value.slice(0, 9);
+        alert("Máximo 9 dígitos permitidos para evitar errores.");
+      }
+    }
+
+    function obtenerDivisores(num) {
+      let divisores = [];
+      for (let i = 1; i <= num; i++) {
+        if (num % i === 0) divisores.push(i);
+      }
+      return divisores;
+    }
+
+    function esPrimo(divisores) {
+      return divisores.length === 2;
+    }
+
+    function raizNewton(num) {
+      let raiz = num;
+      let precision = 0.000001;
+      let iteraciones = 0;
+      while (Math.abs(raiz * raiz - num) > precision) {
+        raiz = (raiz + num / raiz) / 2;
+        iteraciones++;
+        if (iteraciones > 10000) break; // seguridad
+      }
+      return raiz;
+    }
+
+    function analizarNumero() {
+      const input = document.getElementById("numero");
+      const numero = parseFloat(input.value);
+
+      if (isNaN(numero) || numero <= 0) {
+        document.getElementById("resultado").innerText = "Por favor ingresa un número válido.";
+        document.getElementById("divisores").innerText = "";
+        document.getElementById("raiz").innerText = "";
+        return;
+      }
+
+      const divisores = obtenerDivisores(numero);
+      const primo = esPrimo(divisores);
+      const raiz = raizNewton(numero);
+
+      document.getElementById("resultado").innerText = `El número ${numero} es ${primo ? "primo" : "compuesto"}.`;
+      document.getElementById("divisores").innerText = `Es divisible entre: ${divisores.join(", ")}.`;
+      document.getElementById("raiz").innerText = `Raíz cuadrada aproximada: ${raiz.toFixed(6)}`;
+    }
+
+    function limpiar() {
+      document.getElementById("numero").value = "";
+      document.getElementById("resultado").innerText = "";
+      document.getElementById("divisores").innerText = "";
+      document.getElementById("raiz").innerText = "";
+    }
+  </script>
+</body>
+</html>
